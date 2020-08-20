@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ProductsHttpServer from "../../services/ProductsHttpServer";
+import ProductsHttpServer from "../../services/rest/ProductsHttpServer";
 import { getAccessToken } from "../../helpers/accessToken";
 import { FaAt } from "react-icons/fa";
 const Posts = () => {

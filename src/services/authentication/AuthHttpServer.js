@@ -6,15 +6,50 @@ class AuthHttpServer {
       withCredentials: true,
       baseURL: "http://localhost:8001",
     });
-    
   }
-  
+
+  getUserId() {
+    return new Promise((resolve, reject) => {
+      try {
+        resolve(localStorage.getItem("userid"));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  userSessionCheck(userId) {
+    console.log("checking session", userId);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await this.authAPI.post("userSessionCheck", {
+          userId: userId,
+        });
+        console.log("was resolved", response);
+        resolve(response.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 
   setLocalStorage(key, value) {
     console.log(localStorage, { key, value });
     return new Promise(async (resolve, reject) => {
       try {
         localStorage.setItem(key, value);
+        resolve(true);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  removeLocalStorage() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        localStorage.removeItem("userid");
+        localStorage.removeItem("username");
         resolve(true);
       } catch (error) {
         reject(error);

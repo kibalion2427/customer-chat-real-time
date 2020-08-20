@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken, setAccessToken } from "../helpers/accessToken";
+import { getAccessToken, setAccessToken } from "../../helpers/accessToken";
 import AuthHttpServer from "./AuthHttpServer";
 
 class ProductsHttpServer {

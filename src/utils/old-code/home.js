@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Posts from "../../components/molecules/Posts";
-import ProductsHttpServer from "../../services/rest/ProductsHttpServer";
+import ProductsHttpServer from "../../services/ProductsHttpServer";
 import withAuth from "../../components/atoms/withAuth";
 
 const Home = () => {

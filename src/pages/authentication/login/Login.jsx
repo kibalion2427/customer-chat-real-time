@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import decode from "jwt-decode"
 import { FaUser, FaLock } from "react-icons/fa";
 import Input from "../../../components/atoms/input";
-import AuthHttpServer from "../../../services/AuthHttpServer";
+import AuthHttpServer from "../../../services/authentication/AuthHttpServer";
 import { setAccessToken, getAccessToken } from "../../../helpers/accessToken";
 
 import "./Login.css";
@@ -20,17 +20,17 @@ const Login = (props) => {
   };
   const handleLogin = async (e) => {
     e.preventDefault();
-    let response = "";
+    // let response = "";
     try {
-      response = await AuthHttpServer.login(state);
-      if (response && response.userId){ 
-        setAccessToken(response.accessToken)
-        let decodedJWT  = decode(getAccessToken())
-        AuthHttpServer.setLocalStorage("expiresIn", decodedJWT.exp);
+      const user = await AuthHttpServer.login(state);
+      if (user && user.userId){ 
+        setAccessToken(user.accessToken)
+        // let decodedJWT  = decode(getAccessToken())
+        // AuthHttpServer.setLocalStorage("expiresIn", decodedJWT.exp);
       };
-      console.log("TOKEN AFTER LOGIN", getAccessToken());
-      AuthHttpServer.setLocalStorage("userid", response.userId);
-      if (state.username === "admin") history.push("/admin");
+      AuthHttpServer.setLocalStorage("userid", user.userId);
+      AuthHttpServer.setLocalStorage("isAdmin", user.isAdmin);
+      if (user.isAdmin) history.push("/admin");
       else history.push("/home");
     } catch (error) {
       console.log(error)

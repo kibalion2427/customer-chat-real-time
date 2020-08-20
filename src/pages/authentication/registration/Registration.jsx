@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
-import AuthHttpServer from "../../../services/AuthHttpServer";
+import AuthHttpServer from "../../../services/authentication/AuthHttpServer";
 import { setAccessToken } from "../../../helpers/accessToken";
 
 const Registration = () => {
@@ -11,10 +11,17 @@ const Registration = () => {
     username: "",
     password: "",
     usernameAvailable: true,
+    isAdmin: false,
   });
+
+  const handleIsAdminChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.checked });
+    console.log(state);
+  };
 
   const handleInputChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
+    console.log(state);
   };
 
   const checkUsernameAvailability = async (username) => {
@@ -46,8 +53,11 @@ const Registration = () => {
           if (responseRegister.error) {
             alert("Intenta más tarde, error al registrarse");
           } else {
-            if (responseRegister) setAccessToken(responseRegister.accessToken);
-            if (state.username === "admin") history.push("/admin");
+            if (responseRegister && responseRegister.userId)
+              setAccessToken(responseRegister.accessToken);
+            AuthHttpServer.setLocalStorage("userid", responseRegister.userId);
+            AuthHttpServer.setLocalStorage("isAdmin", responseRegister.isAdmin);
+            if (responseRegister.isAdmin) history.push("/admin");
             else history.push("/home");
           }
         } else {
@@ -79,6 +89,17 @@ const Registration = () => {
           onChange={handleInputChange}
         />
       </Form.Group>
+
+      <Form.Check
+        disabled={false}
+        name={"isAdmin"}
+        type={"checkbox"}
+        label={`is Admin?`}
+        id={`check-isAdmin`}
+        checked={state.isAdmin}
+        onChange={handleIsAdminChange}
+      />
+
       <Button variant="primary" type="submit" onClick={handleRegister}>
         Registrarme
       </Button>

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getAccessToken, setAccessToken } from "../helpers/accessToken";
-import AuthHttpServer from "./AuthHttpServer";
+import { getAccessToken, setAccessToken } from "../../helpers/accessToken";
+import AuthHttpServer from "../authentication/AuthHttpServer";
 
 const CONFIG_HEADERS = (token)=>{
   return {Authorization: token
