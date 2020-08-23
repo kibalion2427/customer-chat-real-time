@@ -12,8 +12,6 @@ function App() {
       setAccessToken(accessToken);
       // setLoading(false);
     }
-    console.log("fetch JWT 1 ", accessToken);
-    // console.log("fetch JWT 2", getAccessToken());
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 import React, { useEffect, useState } from "react";
 import { NavLink, withRouter, useHistory } from "react-router-dom";
 import { getAccessToken } from "../../helpers/accessToken";
@@ -8,16 +8,16 @@ import ChatSocketService from "../../services/socket/ChatSocketService";
 
 import "./navbar.css";
 
-// TODO show logout button and username
 const Navbar = () => {
   const history = useHistory();
   const isAuth = !!getAccessToken();
   //   console.log(isAuth, getAccessToken());
-  var userId = null;
+   const [userId,setUserId] = useState(null)
 
   const [state, setState] = useState({ username: "" });
 
   const logout = async () => {
+      console.log("logout navbar user:",userId)
     try {
       await AuthHttpServer.removeLocalStorage();
       ChatSocketService.logout({userId:userId})
@@ -35,27 +35,31 @@ const Navbar = () => {
   const establishSocketConnection = async () => {
       
     try {
-      userId = await AuthHttpServer.getUserId();
-      console.log("navbar establish socket 1",userId)
-      const response = await AuthHttpServer.userSessionCheck(userId);
-      console.log("navbar establish socket 2",userId)
+        const responseUser = await AuthHttpServer.getUserId()
+        // console.log("RESPONSE LOCAL STORAGE",responseUser)
+        if(responseUser){
+            setUserId(responseUser)
+        }
+      const response = await AuthHttpServer.userSessionCheck(responseUser);
+      // console.log("navbar establish socket 2",userId)
       if (response.error) {
         history.push("/");
       } else {
         setState({ ...state, username: response.username });
         AuthHttpServer.setLocalStorage("username", response.username);
-        ChatSocketService.establishSocketConnection(userId);
+        ChatSocketService.establishSocketConnection(responseUser);
       }
     } catch (error) {
       history.push("/");
     }
 
-    if (userId) {
-      return userId;
-    }
-    return null;
+    // if (userId) {
+    //   return userId;
+    // }
+    // return null;
   };
-  useEffect(() => {
+  useEffect( () => {
+    console.log("useEffect")
     //check user session and set a socketId to user
     establishSocketConnection();
   }, []);

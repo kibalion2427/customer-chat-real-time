@@ -21,10 +21,13 @@ class ChatSocketService {
   //logout
 
   logout(userId) {
+      console.log("logout to user:",userId)
     //send event
     this.socket.emit("logout", userId);
     //listen for events
     this.socket.on("logout-response", (data) => {
+      console.log("logout response data",data)
+      this.socket.disconnect()
       this.eventEmitter.emit("logout-response", data);
     });
   }

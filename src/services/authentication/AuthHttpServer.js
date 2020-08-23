@@ -66,6 +66,7 @@ class AuthHttpServer {
         //     withCredentials: true,
         //   }
         // );
+        console.log("login", userCredential);
         const response = await this.authAPI.post("login", userCredential);
         resolve(response.data);
       } catch (error) {
