@@ -35,31 +35,24 @@ const Navbar = () => {
   const establishSocketConnection = async () => {
       
     try {
-        const responseUser = await AuthHttpServer.getUserId()
-        // console.log("RESPONSE LOCAL STORAGE",responseUser)
+        const responseUser = await AuthHttpServer.getUserId()//from localstorage
         if(responseUser){
             setUserId(responseUser)
         }
-      const response = await AuthHttpServer.userSessionCheck(responseUser);
-      // console.log("navbar establish socket 2",userId)
+      const response = await AuthHttpServer.userSessionCheck(responseUser);//check if user isOnline = 'Y' in DB
       if (response.error) {
         history.push("/");
       } else {
         setState({ ...state, username: response.username });
         AuthHttpServer.setLocalStorage("username", response.username);
-        ChatSocketService.establishSocketConnection(responseUser);
+        // ChatSocketService.establishSocketConnection(responseUser);
       }
     } catch (error) {
       history.push("/");
     }
-
-    // if (userId) {
-    //   return userId;
-    // }
-    // return null;
   };
   useEffect( () => {
-    console.log("useEffect")
+    // console.log("useEffect")
     //check user session and set a socketId to user
     establishSocketConnection();
   }, []);

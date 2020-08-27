@@ -7,24 +7,3 @@
 .app-header nav {
   float: left;
 }
-
-.content {
-  height: 70vh;
-  margin-top: 5vh;
-}
-
-.chat-content {
-  height: 100%;
-}
-
-.chat-list-container {
-  padding: 25px 15px;
-  height: 100%;
-  -webkit-box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
-}
-
-.message-container {
-  height: 100%;
-}

@@ -1,0 +1,41 @@
+.message-wrapper {
+  height: 100%;
+}
+
+.message-container {
+  height: 80%;
+  /* background-color: green; */
+  /* width: 100%; */
+}
+.message-typer {
+  height: 20%;
+  display: flex;
+  padding-top: 20px;
+  justify-content: space-between;
+  align-items: flex-end;
+  /* background-color: burlywood; */
+}
+
+.text-area-message {
+  width: 90%;
+  padding-right: 100px;
+  border-radius: 5px;
+  display: block;
+  background-color: mediumSpringGreen;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+.btn-send-message {
+  /* margin-left: -100px; */
+  margin: 5px;
+  border-radius: 5px;
+  height: 40px;
+  width: 10%;
+  background: blue;
+  color: white;
+  border: 0;
+  -webkit-appearance: none;
+}

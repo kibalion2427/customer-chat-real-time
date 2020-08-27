@@ -1,4 +1,4 @@
-import io from "socket.io-client";
+import * as io from "socket.io-client";
 import events from "events";
 
 class ChatSocketService {
@@ -21,15 +21,25 @@ class ChatSocketService {
   //logout
 
   logout(userId) {
-      console.log("logout to user:",userId)
     //send event
     this.socket.emit("logout", userId);
     //listen for events
     this.socket.on("logout-response", (data) => {
-      console.log("logout response data",data)
-      this.socket.disconnect()
+      this.socket.disconnect();
       this.eventEmitter.emit("logout-response", data);
     });
+  }
+
+  sendMessage(message) {
+    this.socket.emit("add-message", message);
+  }
+
+  receiveMessage() {
+    if (this.socket) {
+      this.socket.on("add-message-response", (data) => {
+        this.eventEmitter.emit("add-message-response", data);
+      });
+    }
   }
 }
 

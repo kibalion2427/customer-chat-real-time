@@ -18,6 +18,27 @@ class AuthHttpServer {
     });
   }
 
+  getUserName() {
+    return new Promise((resolve, reject) => {
+      try {
+        resolve(localStorage.getItem("username"));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  getUserByUsername(username){
+    return new Promise(async (resolve,reject)=>{
+        try{
+          const response = await this.authAPI.post("user",{username:username})
+          resolve(response.data)
+        }catch(error){
+            reject(error)
+        }
+    })
+  }
+
   userSessionCheck(userId) {
     console.log("checking session", userId);
     return new Promise(async (resolve, reject) => {
@@ -25,7 +46,7 @@ class AuthHttpServer {
         const response = await this.authAPI.post("userSessionCheck", {
           userId: userId,
         });
-        console.log("was resolved", response);
+        // console.log("was resolved", response);
         resolve(response.data);
       } catch (error) {
         reject(error);
@@ -34,8 +55,8 @@ class AuthHttpServer {
   }
 
   setLocalStorage(key, value) {
-    console.log(localStorage, { key, value });
-    return new Promise(async (resolve, reject) => {
+    // console.log(localStorage, { key, value });
+    return new Promise((resolve, reject) => {
       try {
         localStorage.setItem(key, value);
         resolve(true);
@@ -66,7 +87,7 @@ class AuthHttpServer {
         //     withCredentials: true,
         //   }
         // );
-        console.log("login", userCredential);
+        // console.log("login", userCredential);
         const response = await this.authAPI.post("login", userCredential);
         resolve(response.data);
       } catch (error) {

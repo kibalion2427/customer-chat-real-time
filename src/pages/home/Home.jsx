@@ -1,29 +1,54 @@
-import React, { useState } from "react";
-import Posts from "../../components/molecules/Posts";
-import ProductsHttpServer from "../../services/rest/ProductsHttpServer";
-import withAuth from "../../components/atoms/withAuth";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import ClientChat from "../../components/client-chat/clientChat";
+import AuthHttpServer from "../../services/authentication/AuthHttpServer";
+import ChatSocketService from "../../services/socket/ChatSocketService";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
+  const history = useHistory();
+  const [user, setUser] = useState({});
+  const [userId, setUserId] = useState({});
+  const [state, setState] = useState({});
+  const [adminUser, setAdminUser] = useState({});
+  const [isOverlayVisible, setIsOverlayVisible] = useState(true);
 
-  const getPosts = async () => {
+  const setRenderLoadingState = (loadingState) => {
+    setIsOverlayVisible(loadingState);
+  };
+  const establishSocketConnection = async () => {
     try {
-      const response = await ProductsHttpServer.posts();
-      if (response) {
-        setPosts(response);
-        console.log("RESPONSE", response[0]);
-        console.log("POSTS", posts);
+      setRenderLoadingState(true);
+      const responseUser = await AuthHttpServer.getUserId(); //from localstorage
+      const admin = await AuthHttpServer.getUserByUsername("admin");
+      if (responseUser) {
+        setUserId(responseUser);
       }
+      if (userId) {
+        setAdminUser(admin.user.userId);
+      }
+      const response = await AuthHttpServer.userSessionCheck(responseUser); //check if user isOnline = 'Y' in DB
+      if (response.error) {
+        history.push("/");
+      } else {
+        setState({ ...state, username: response.username });
+        AuthHttpServer.setLocalStorage("username", response.username);
+        ChatSocketService.establishSocketConnection(responseUser);
+      }
+      setRenderLoadingState(false);
     } catch (error) {
-      // console.log(error);
+      setRenderLoadingState(false);
+      history.push("/");
     }
   };
+  useEffect(() => {
+    establishSocketConnection();
+  }, []);
+  const getClientChatComponent=()=>{
+    return isOverlayVisible ? null : <ClientChat userId={userId} adminUserId={adminUser} />
+  }
   return (
     <div>
-      Home
-      <button onClick={() => getPosts()}>Get Posts</button>
-      <ul>{posts && posts.map((post, i) => <li key={i}>{post.title}</li>)}</ul>
-      {/* <Posts /> */}
+      {getClientChatComponent()}
     </div>
   );
 };

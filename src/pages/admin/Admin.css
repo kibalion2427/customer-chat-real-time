@@ -1,0 +1,30 @@
+.content{
+    height: 70vh;
+    margin-top: 5vh;
+    /* width: auto; */
+    /* max-width: 80%; */
+    padding: 0 15px;
+    margin: 50px;
+    /* border: 1px solid black; */
+}
+
+.chat-content{
+    height: 100%;
+    /* border: 1px solid black; */
+}
+
+
+.chat-list-container {
+    padding: 25px 15px;
+    height: 100%;
+    -webkit-box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+}
+
+.chat-box-container{
+    height: 100%;
+    /* border: 1px solid blue; */
+    /* width: 100%; */
+
+  }
