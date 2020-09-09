@@ -8,6 +8,18 @@ class AuthHttpServer {
     });
   }
 
+
+  getUserById(userId) {
+    // console.log(userId)
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await this.authAPI.post("user", { userId: userId });
+        resolve(response.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
   getUserId() {
     return new Promise((resolve, reject) => {
       try {
@@ -28,15 +40,18 @@ class AuthHttpServer {
     });
   }
 
-  getUserByUsername(username){
-    return new Promise(async (resolve,reject)=>{
-        try{
-          const response = await this.authAPI.post("user",{username:username})
-          resolve(response.data)
-        }catch(error){
-            reject(error)
-        }
-    })
+  getUserByUsername(username) {
+    console.log(username)
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await this.authAPI.post("user", {
+          username: username,
+        });
+        resolve(response.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   userSessionCheck(userId) {

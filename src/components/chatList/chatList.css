@@ -1,0 +1,17 @@
+.user-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.user-list li {
+  padding: 10px 11px;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+  background: rgba(215, 234, 255, 0.28);
+}
+.user-list .active {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+  background: rgba(153, 202, 255, 0.49);
+  border: 0px !important;
+}

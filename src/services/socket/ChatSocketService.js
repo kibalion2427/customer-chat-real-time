@@ -1,9 +1,11 @@
 import * as io from "socket.io-client";
-import events from "events";
+import Emitter from "../../services/emitter"
+// import events from "events";
 
 class ChatSocketService {
   socket = null;
-  eventEmitter = new events.EventEmitter();
+  // eventEmitter = new events.EventEmitter();
+  eventEmitter =  Emitter
 
   // Connect to socket server
   // Assign a socketId to userId in DB
@@ -35,11 +37,9 @@ class ChatSocketService {
   }
 
   receiveMessage() {
-    if (this.socket) {
       this.socket.on("add-message-response", (data) => {
         this.eventEmitter.emit("add-message-response", data);
       });
-    }
   }
 }
 

@@ -12,12 +12,14 @@ const Home = () => {
   const [adminUser, setAdminUser] = useState({});
   const [isOverlayVisible, setIsOverlayVisible] = useState(true);
 
+
   const setRenderLoadingState = (loadingState) => {
     setIsOverlayVisible(loadingState);
   };
   const establishSocketConnection = async () => {
     try {
       setRenderLoadingState(true);
+      console.log("get user by username api");
       const responseUser = await AuthHttpServer.getUserId(); //from localstorage
       const admin = await AuthHttpServer.getUserByUsername("admin");
       if (responseUser) {
