@@ -20,6 +20,19 @@ class ChatHttpService {
       }
     });
   }
+
+  getChatList(userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await this.chatAPI.post("getChatList", {
+          userId: userId,
+        });
+        resolve(response.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 export default new ChatHttpService();

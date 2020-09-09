@@ -1,14 +1,15 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import _uniqBy from "lodash/uniqBy";
-import {AdminChatContext} from "../../_context/AdminChatContext"
+import { AdminChatContext } from "../../_context/AdminChatContext";
 import ChatSocketService from "../../services/socket/ChatSocketService";
 import AuthHttpServer from "../../services/authentication/AuthHttpServer";
 import "./chatList.css";
+import ChatHttpService from "../../services/chat/ChatHttpService";
 
 const ChatList = ({ userId, updateSelectedUser }) => {
   const [chatListUsers, setChatListUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [selectedUser,setSelectedUser] = useContext(AdminChatContext)
+  const [selectedUser, setSelectedUser] = useContext(AdminChatContext);
 
   const getUserId = async (userId) => {
     try {
@@ -45,9 +46,12 @@ const ChatList = ({ userId, updateSelectedUser }) => {
   const handleSelectedUser = (user) => {
     setSelectedUserId(user.userId);
     // updateSelectedUser(user);
-    setSelectedUser(user)//set global context
-  
+    setSelectedUser(user); //set global context
   };
+
+  /**
+   * This effect allow to push a customer user to admin chat-list, each time the customer send a message
+   */
 
   useEffect(() => {
     ChatSocketService.eventEmitter.on(
@@ -62,11 +66,38 @@ const ChatList = ({ userId, updateSelectedUser }) => {
     };
   }, []);
 
+  /**
+   * This effect allows to load chat list from previous conversations
+   */
+  useEffect(() => {
+    async function getChatList() {
+      try {
+        const chatListResponse = await ChatHttpService.getChatList(userId);
+        if (chatListResponse) {
+          // console.log("chatlist response", chatListResponse);
+          chatListResponse.chatList.map(async (item, index) => {
+            const response = await getUserId(item._id);
+            if (response) {
+              setChatListUsers((chatListUsers) => [
+                ...chatListUsers,
+                response.user,
+              ]);
+            }
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getChatList();
+  }, []);
+
   return (
     <div>
       <h2>Chats</h2>
       <div>
-        <input type="text" placeholder="Find a Chat" />
+        <input type="text" placeholder="Find a Customer to Chat" />
       </div>
       <ul className="user-list">
         {chatListUsers &&
