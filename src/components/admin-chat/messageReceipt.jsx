@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import "./messages.css";
 
-const Messages = ({ conversations, currentUserId }) => {
+const MessageReceipt = ({ conversations, currentUserId,typingUserId }) => {
   const messageContainer = useRef(null);
 
   const alignMessages = (toUserId) => {
@@ -25,6 +25,8 @@ const Messages = ({ conversations, currentUserId }) => {
 
   const getMessageUI = () => {
     return (
+      <>
+      {/* <div> */}
       <ul ref={messageContainer} className="message-thread">
         {conversations.map((conversation, index) => (
           <li
@@ -40,6 +42,11 @@ const Messages = ({ conversations, currentUserId }) => {
           </li>
         ))}
       </ul>
+      {/* </div> */}
+      <div className="typing-user">
+      { typingUserId && `${typingUserId} is typing...`}
+      </div>
+      </>
     );
   };
   const getInitiateConversationUI = () => {
@@ -52,4 +59,4 @@ const Messages = ({ conversations, currentUserId }) => {
   );
 };
 
-export default Messages;
+export default MessageReceipt;

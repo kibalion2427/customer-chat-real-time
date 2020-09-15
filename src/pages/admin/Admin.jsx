@@ -57,6 +57,10 @@ const Admin = () => {
   useEffect(() => {
     establishSocketConnection();
   }, []);
+
+  useEffect(()=>{
+    
+  })
   return (
     <AdminChatProvider>
     <div className=" content">

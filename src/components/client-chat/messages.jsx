@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 const Messages = ({ conversations }) => {
   const messageContainer = useRef();
-  console.log("message Component",conversations)
+  // console.log("message Component",conversations)
   const getMessageUI = () => {
     return (
       <ul ref={messageContainer}>

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import { AdminChatContext } from "../../_context/AdminChatContext";
 import ChatSocketService from "../../services/socket/ChatSocketService";
-import Messages from "./messages";
+import MessageReceipt from "./messageReceipt";
 import "./adminChat.css";
 import ChatHttpService from "../../services/chat/ChatHttpService";
 
@@ -15,9 +15,22 @@ const Conversation = ({ userId }) => {
   const [selectedUser, setSelectedUser] = useContext(AdminChatContext);
   const [messageloading, setMessageloading] = useState(false);
   const refSelectedUser = useRef(selectedUser);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingUserId, setTypingUserId] = useState(null);
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
+  };
+
+  const handleTyping = (e) => {
+    const LAST_UPDATE_TIME = Date.now();
+    if (e.keyCode !== 13) {
+      if (!isTyping) {
+        setIsTyping(true);
+      }
+
+      // console.log(`${userId} is Typing`);
+    }
   };
 
   /**
@@ -76,6 +89,36 @@ const Conversation = ({ userId }) => {
     }
   };
 
+  const receiveSocketTypingEvent = (socketTypingPacket) => {
+    if (refSelectedUser?.current?.userId) {
+      if (
+        socketTypingPacket.isTyping &&
+        socketTypingPacket.userId === refSelectedUser.current.userId
+      ) {
+        setTypingUserId(socketTypingPacket.userId);
+      } else {
+        setTypingUserId(null);
+      }
+    }
+  };
+
+  /**
+   * Receive if a custom user typed in the Client Chat Component
+   */
+  useEffect(() => {
+    ChatSocketService.receiveIsTyping();
+    ChatSocketService.eventEmitter.on(
+      "typing-response",
+      receiveSocketTypingEvent
+    );
+    return () => {
+      ChatSocketService.eventEmitter.off(
+        "typing-response",
+        receiveSocketTypingEvent
+      );
+    };
+  }, []);
+
   /**
    * This effect suscribe and unsubscribe the eventEmitter listener
    */
@@ -95,7 +138,7 @@ const Conversation = ({ userId }) => {
   }, []);
 
   /**
-   * This effect allows keeping the latest globalstate updated
+   * This effect allows keep the latest globalstate updated
    */
   useEffect(() => {
     refSelectedUser.current = selectedUser;
@@ -115,7 +158,6 @@ const Conversation = ({ userId }) => {
         if (!messageResponse.error) {
           console.log("messages received", messageResponse.messages);
           setConversations(messageResponse.messages);
-          
         } else {
           alert("Cannot fetch messages");
         }
@@ -130,7 +172,11 @@ const Conversation = ({ userId }) => {
   return (
     <div className="message-wrapper">
       <div className="message-container">
-        <Messages conversations={conversations} currentUserId={userId} />
+        <MessageReceipt
+          conversations={conversations}
+          currentUserId={userId}
+          typingUserId={typingUserId}
+        />
       </div>
       <div className="message-typer">
         <TextareaAutosize
@@ -139,6 +185,7 @@ const Conversation = ({ userId }) => {
           onChange={handleInputChange}
           ref={textareaRef}
           minRows={2}
+          onKeyUp={handleTyping}
         ></TextareaAutosize>
         <button onClick={handleSendMessage} className="btn-send-message">
           Send

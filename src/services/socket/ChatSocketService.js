@@ -1,11 +1,11 @@
 import * as io from "socket.io-client";
-import Emitter from "../../services/emitter"
+import Emitter from "../../services/emitter";
 // import events from "events";
 
 class ChatSocketService {
   socket = null;
   // eventEmitter = new events.EventEmitter();
-  eventEmitter =  Emitter
+  eventEmitter = Emitter;
 
   // Connect to socket server
   // Assign a socketId to userId in DB
@@ -37,9 +37,17 @@ class ChatSocketService {
   }
 
   receiveMessage() {
-      this.socket.on("add-message-response", (data) => {
-        this.eventEmitter.emit("add-message-response", data);
-      });
+    this.socket.on("add-message-response", (data) => {
+      this.eventEmitter.emit("add-message-response", data);
+    });
+  }
+  sendIsTyping({ userId, isTyping }) {
+    this.socket.emit("typing", { userId, isTyping });
+  }
+  receiveIsTyping() {
+    this.socket.on("typing-response", (data) => {
+      this.eventEmitter.emit("typing-response", data);
+    });
   }
 }
 

@@ -9,6 +9,9 @@ const ClientChat = ({ userId, adminUserId }) => {
   const inputArea = useRef();
   const [message, setMessage] = useState(null);
   const [conversations, setConversations] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [lastUpdateTime, setLastUpdateTime] = useState(null);
+  const isTypingRef = useRef(isTyping);
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
@@ -39,6 +42,33 @@ const ClientChat = ({ userId, adminUserId }) => {
     ]);
   };
 
+  const handleTyping = (e) => {
+    if (e.keyCode !== 13) {
+      setLastUpdateTime(Date.now());
+      if (!isTyping) {
+        setIsTyping(true);
+        // ChatSocketService.sendIsTyping({ userId, isTyping:!isTyping });
+        startCheckingTyping();
+      }
+    }
+  };
+  const startCheckingTyping = () => {
+    console.log("Typing");
+    const typingInterval = setInterval(() => {
+      if (Date.now() - lastUpdateTime > 300) {
+        setIsTyping(false);
+        stopCheckingTyping(typingInterval);
+      }
+    }, 300);
+  };
+
+  const stopCheckingTyping = (intervalID) => {
+    console.log("Stop Typing");
+    if (intervalID) {
+      clearInterval(intervalID);
+    }
+  };
+
   useEffect(() => {
     ChatSocketService.receiveMessage();
     ChatSocketService.eventEmitter.on(
@@ -53,6 +83,18 @@ const ClientChat = ({ userId, adminUserId }) => {
     };
   }, []);
 
+  /**
+   * This effect allows emmit a typing event trought a socket
+   *
+   */
+  useEffect(() => {
+    if (isTyping) {
+      ChatSocketService.sendIsTyping({ userId, isTyping });
+    }else{
+      ChatSocketService.sendIsTyping({ userId, isTyping:false });
+    }
+  }, [isTyping]);
+
   return (
     <div className="contenedor-cliente">
       Chat Client
@@ -64,6 +106,7 @@ const ClientChat = ({ userId, adminUserId }) => {
           id="message"
           onChange={handleInputChange}
           ref={inputArea}
+          onKeyUp={handleTyping}
         />
         <button onClick={handleSendMessage}>Send</button>
       </div>

@@ -48,3 +48,9 @@
 .message-ui {
   height: 100%;
 }
+
+.typing-user{
+  text-align: right;
+  margin: 10px 15px;
+  color: lightgray;
+}
