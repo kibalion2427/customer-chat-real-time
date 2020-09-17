@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background-color: #222831 !important;
 }
 
 body {
@@ -25,10 +26,11 @@ body {
   bottom: 0;
   left: 0;
   height: 100%;
-  z-index: -1;
+  /* z-index: -1; */
+  /* background-color: green !important; */
 }
 .wave:hover {
-  display: none;
+  /* display: none; */
 }
 
 .container {
@@ -44,6 +46,7 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  /* color: green !important; */
 }
 
 .login-content {
@@ -67,7 +70,7 @@ form {
 
 .login-content h2 {
   margin: 15px 0;
-  color: #333;
+  color: #eaeaea;
   text-transform: uppercase;
   font-size: 2.9rem;
 }

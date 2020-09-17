@@ -4,6 +4,7 @@ import "./messages";
 // import "./clientChat.css";
 import Messages from "./messages";
 import ChatSocketService from "../../services/socket/ChatSocketService";
+import { getTime } from "../../helpers/date";
 
 const ClientChat = ({ userId, adminUserId }) => {
   const inputArea = useRef();
@@ -23,6 +24,7 @@ const ClientChat = ({ userId, adminUserId }) => {
       fromUserId: userId,
       message: message.trim(),
       toUserId: adminUserId,
+      time: getTime(new Date(Date.now())),
     });
     inputArea.current.value = "";
   };
@@ -55,17 +57,25 @@ const ClientChat = ({ userId, adminUserId }) => {
   const startCheckingTyping = () => {
     console.log("Typing");
     const typingInterval = setInterval(() => {
-      if (Date.now() - lastUpdateTime > 300) {
+      if (Date.now() - lastUpdateTime > 3000) {
         setIsTyping(false);
         stopCheckingTyping(typingInterval);
       }
-    }, 300);
+    }, 3000);
   };
 
   const stopCheckingTyping = (intervalID) => {
     console.log("Stop Typing");
     if (intervalID) {
       clearInterval(intervalID);
+    }
+  };
+
+  const emmitTypingEvent = (isTyping) => {
+    if (isTyping) {
+      ChatSocketService.sendIsTyping({ userId, isTyping });
+    } else {
+      ChatSocketService.sendIsTyping({ userId, isTyping: false });
     }
   };
 
@@ -76,7 +86,7 @@ const ClientChat = ({ userId, adminUserId }) => {
       receiveSocketMessages
     );
     return () => {
-      ChatSocketService.eventEmitter.removeListener(
+      ChatSocketService.eventEmitter.off(
         "add-message-response",
         receiveSocketMessages
       );
@@ -88,11 +98,7 @@ const ClientChat = ({ userId, adminUserId }) => {
    *
    */
   useEffect(() => {
-    if (isTyping) {
-      ChatSocketService.sendIsTyping({ userId, isTyping });
-    }else{
-      ChatSocketService.sendIsTyping({ userId, isTyping:false });
-    }
+    emmitTypingEvent(isTyping);
   }, [isTyping]);
 
   return (

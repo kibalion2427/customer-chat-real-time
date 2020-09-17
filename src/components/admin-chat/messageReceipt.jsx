@@ -50,7 +50,11 @@ const MessageReceipt = ({ conversations, currentUserId,typingUserId }) => {
     );
   };
   const getInitiateConversationUI = () => {
-    return <p>You haven't chatted yet, Say Hi</p>;
+    return (
+    <div className="initial-conversation-container">
+    <p>Select a user to chat</p>
+    </div>
+    )
   };
   return (
     <div className="message-ui">

@@ -1,0 +1,16 @@
+.title{
+    color: #EAEAEA !important;
+}
+input{
+    color: #EAEAEA !important;
+}
+
+input:focus{
+    border: 1px solid #EAEAEA !important;
+}
+.form-group:focus{
+    border: 1px solid #EAEAEA !important;
+}
+.auth-form{
+    color: #eaeaea !important;
+}

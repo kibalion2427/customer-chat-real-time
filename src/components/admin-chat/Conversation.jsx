@@ -6,6 +6,7 @@ import ChatSocketService from "../../services/socket/ChatSocketService";
 import MessageReceipt from "./messageReceipt";
 import "./adminChat.css";
 import ChatHttpService from "../../services/chat/ChatHttpService";
+import { getTime } from "../../helpers/date";
 
 const Conversation = ({ userId }) => {
   const history = useHistory();
@@ -53,13 +54,37 @@ const Conversation = ({ userId }) => {
     sendAndUpdateMessages({
       fromUserId: userId,
       message: message.trim(),
-      // toUserId: "5f44773963e20927cb7246ac",
       toUserId: selectedUser.userId,
+      time: getTime(new Date(Date.now())),
     });
     textareaRef.current.value = "";
     setMessage("");
   };
 
+  // if
+  const handleSendMessageKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (message === "" || !message) {
+        alert("type a message");
+        return;
+      }
+      if (userId === "") {
+        history.push("/");
+      }
+      if (!selectedUser) {
+        alert("select a user to chat");
+        return;
+      }
+      sendAndUpdateMessages({
+        fromUserId: userId,
+        message: message.trim(),
+        // toUserId: "5f44773963e20927cb7246ac",
+        toUserId: selectedUser.userId,
+      });
+      textareaRef.current.value = "";
+      setMessage("");
+    }
+  };
   const sendAndUpdateMessages = (messagePacket) => {
     try {
       ChatSocketService.sendMessage(messagePacket);
@@ -182,10 +207,12 @@ const Conversation = ({ userId }) => {
         <TextareaAutosize
           name="message"
           className="text-area-message"
+          placeholder="Type a message and hit..."
           onChange={handleInputChange}
           ref={textareaRef}
           minRows={2}
           onKeyUp={handleTyping}
+          onKeyPress={handleSendMessageKeyPress}
         ></TextareaAutosize>
         <button onClick={handleSendMessage} className="btn-send-message">
           Send

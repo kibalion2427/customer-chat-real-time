@@ -121,15 +121,15 @@ const mixins = {
     ${media.phablet`padding: 0 25px;`};
   `,
 
-  boxShadow: css`
-    box-shadow: 0 10px 30px -15px ${colors.shadowNavy};
-    transition: ${theme.transition};
+  // boxShadow: css`
+  //   box-shadow: 0 10px 30px -15px ${colors.shadowNavy};
+  //   transition: ${theme.transition};
 
-    &:hover,
-    &:focus {
-      box-shadow: 0 20px 30px -15px ${colors.shadowNavy};
-    }
-  `,
+  //   &:hover,
+  //   &:focus {
+  //     box-shadow: 0 20px 30px -15px ${colors.shadowNavy};
+  //   }
+  // `,
 
   fancyList: css`
     padding: 0;

@@ -1,9 +1,28 @@
 .app-header {
-  background-color: #f5f5f5;
-  padding: 1.5vh 5vh;
-  height: 10vh;
+  background-color: #eaeaea !important;
+  color: #e4e3e3 !important;
 }
 
-.app-header nav {
-  float: left;
+a.nav-link:hover{
+  text-decoration: none;
+  color: #e4e3e3;
 }
+
+.nav-text{
+  color: #222831 !important;
+  background-color: #eaeaea !important;
+  
+}
+.nav-logo {
+  color: #222831 !important;
+  background-color: #eaeaea !important;
+  
+}
+.nav-text:hover{
+  color: #eaeaea !important;
+  /* font-weight: 600; */
+  background-color: #00ADB5 !important;
+}
+
+
+

@@ -18,7 +18,7 @@ const Authentication = () => {
         <div className="login-content">
           <div>
             <img src={avatar} />
-            <h2 className="title">Howdy!!</h2>
+            <h2 className="title">Chat!!</h2>
             <TabContainer>
               <Tabs variant="pills" defaultActiveKey="login">
                 <Tab eventKey="login" title="Inicia sesión">

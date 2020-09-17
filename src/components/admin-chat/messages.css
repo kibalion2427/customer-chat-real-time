@@ -34,23 +34,32 @@
 .align-right {
   float: right !important;
   text-align: right;
-  background-color: rgba(0, 123, 255, 0.07);
-  color: #444444;
-  border: solid 1px #007bff;
+  background-color: #00ADB5 !important;
+  color: #eaeaea;
+  /* border: solid 1px #007bff; */
 }
 .align-left{
     float: left !important;
   text-align: left;
-  background-color: white;
-  color: #444444;
-  border: solid 1px black;
+  background-color: #eaeaea !important;
+  color: black;
+  /* border: solid 1px black; */
 }
 .message-ui {
   height: 100%;
+  color: #eaeaea;
 }
 
 .typing-user{
   text-align: right;
   margin: 10px 15px;
   color: lightgray;
+}
+.initial-conversation-container{
+  width: 100%;
+  height: auto;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  text-align: center;
 }

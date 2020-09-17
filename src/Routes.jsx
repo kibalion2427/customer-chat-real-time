@@ -11,7 +11,8 @@ import Admin from "./pages/admin/Admin";
 import Authentication from "./pages/authentication/Authentication";
 import Navbar from "./components/molecules/navbar";
 import { getAccessToken } from "./helpers/accessToken";
-import { Role } from "./_helpers/role";
+import { Role } from "./helpers/role";
+import "./Routes.css"
 
 const AdminRoute = ({ component: Component, roles, ...rest }) => {
   return (
@@ -21,19 +22,13 @@ const AdminRoute = ({ component: Component, roles, ...rest }) => {
         const currentUser = localStorage.getItem("userid");
         //TODO check if user has permision using AuthAPI, not localstorage
         const isAdmin = Boolean(localStorage.getItem("isAdmin"));
-        console.log("testing admin", isAdmin);
         if (!currentUser) {
           //user is not logged in
-          console.log("not logged in");
           return <Redirect to={{ pathname: "/" }} />;
         }
-        // console.log(roles[0])
-        console.log("ADMIN?", localStorage.getItem("isAdmin"));
-        // console.log(roles.indexOf(localStorage.getItem("isAdmin")))
 
         if (roles && localStorage.getItem("isAdmin") !== "true") {
           //user is not authorized
-          console.log("not authorized");
           return <Redirect to={{ pathname: "/" }} />;
         }
 

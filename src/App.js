@@ -20,7 +20,7 @@ function App() {
 
   // if (loading) return <div>Loading...</div>;
 
-  return <Routes />;
+  return <Routes className="routes-view" />;
 }
 
 export default App;

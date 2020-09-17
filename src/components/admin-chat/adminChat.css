@@ -19,10 +19,17 @@
 .text-area-message {
   width: 90%;
   padding-right: 100px;
-  border-radius: 5px;
   display: block;
-  background-color: mediumSpringGreen;
+  background-color: #393E46 !important;
+  /* border-color: #F2F2F2; */
+  border-radius: 15px;
+  padding-left: 20px;
+  color: #eaeaea;
 }
+textarea::-webkit-input-placeholder {
+  color: #7F7F7F;
+  }
+  
 
 textarea:focus, input:focus{
   outline: none;

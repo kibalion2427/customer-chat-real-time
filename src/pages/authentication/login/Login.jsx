@@ -58,20 +58,6 @@ const Login = (props) => {
           onChange={handleInputChange}
         />
       </Form.Group>
-      {/* <Input
-        icon={<FaUser />}
-        text="Username"
-        type="text"
-        style="input-div one"
-        name="username"
-      />
-      <Input
-        icon={<FaLock />}
-        text="Password"
-        type="password"
-        style="input-div pass"
-        name="password"
-      /> */}
       <Button variant="primary" type="submit" onClick={handleLogin}>
         Ingresar
       </Button>

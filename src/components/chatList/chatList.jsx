@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
-import _uniqBy from "lodash/uniqBy";
-import { AdminChatContext } from "../../_context/AdminChatContext";
+import React, { useState, useEffect } from "react";
+import { FaSearch } from "react-icons/fa";
 import ChatSocketService from "../../services/socket/ChatSocketService";
 import AuthHttpServer from "../../services/authentication/AuthHttpServer";
 import "./chatList.css";
 import ChatHttpService from "../../services/chat/ChatHttpService";
+import ContactContainer from "./contactContainer";
 
 const ChatList = ({ userId, updateSelectedUser }) => {
   const [chatListUsers, setChatListUsers] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [selectedUser, setSelectedUser] = useContext(AdminChatContext);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   const getUserId = async (userId) => {
     try {
@@ -22,12 +22,16 @@ const ChatList = ({ userId, updateSelectedUser }) => {
       console.log(error);
     }
   };
+  const editSearchTerm = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   const createChatListUsers = async (socketMessagePacket) => {
     try {
       if (!socketMessagePacket.error) {
         const response = await getUserId(socketMessagePacket.fromUserId);
         if (response) {
+          // console.log("response-chat",response.user);
           setChatListUsers((chatListUsers) => [
             ...chatListUsers,
             response.user,
@@ -40,14 +44,15 @@ const ChatList = ({ userId, updateSelectedUser }) => {
   };
 
   /**
-   * Allow update parent function prop to update (selectedUser) and pass it to Conversation component
-   * @param {*} user
+   * Effect to filter contacts
    */
-  const handleSelectedUser = (user) => {
-    setSelectedUserId(user.userId);
-    // updateSelectedUser(user);
-    setSelectedUser(user); //set global context
-  };
+
+  useEffect(() => {
+    const result = chatListUsers.filter((user) => {
+      return user.username.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    setFilteredData(result);
+  }, [searchTerm]);
 
   /**
    * This effect allow to push a customer user to admin chat-list, each time the customer send a message
@@ -74,11 +79,14 @@ const ChatList = ({ userId, updateSelectedUser }) => {
       try {
         const chatListResponse = await ChatHttpService.getChatList(userId);
         if (chatListResponse) {
-          // console.log("chatlist response", chatListResponse);
           chatListResponse.chatList.map(async (item, index) => {
             const response = await getUserId(item._id);
             if (response) {
               setChatListUsers((chatListUsers) => [
+                ...chatListUsers,
+                response.user,
+              ]);
+              setFilteredData((chatListUsers) => [
                 ...chatListUsers,
                 response.user,
               ]);
@@ -96,21 +104,17 @@ const ChatList = ({ userId, updateSelectedUser }) => {
   return (
     <div>
       <h2>Chats</h2>
-      <div>
-        <input type="text" placeholder="Find a Customer to Chat" />
+      <div className="input-finder-icon">
+        <input
+          type="text"
+          value={searchTerm}
+          placeholder="Find a Chat"
+          className="col-12 search-input"
+          onChange={editSearchTerm}
+        />
+        <FaSearch className="input-icon" />
       </div>
-      <ul className="user-list">
-        {chatListUsers &&
-          _uniqBy(chatListUsers, "userId").map((user, index) => (
-            <li
-              className={selectedUserId === user.userId ? "active" : ""}
-              key={index}
-              onClick={() => handleSelectedUser(user)}
-            >
-              {user.username}
-            </li>
-          ))}
-      </ul>
+      {chatListUsers && <ContactContainer chatListUsers={filteredData} />}
     </div>
   );
 };
