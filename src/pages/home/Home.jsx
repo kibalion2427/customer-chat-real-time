@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import styled from 'styled-components';
 import ClientChat from "../../components/client-chat/clientChat";
 import AuthHttpServer from "../../services/authentication/AuthHttpServer";
 import ChatSocketService from "../../services/socket/ChatSocketService";
 
+const Container = styled.div`
+  // //  background-color: red !important;
+  //  color:white;
+`;
+
 const Home = () => {
   const history = useHistory();
-  const [user, setUser] = useState({});
   const [userId, setUserId] = useState({});
   const [state, setState] = useState({});
   const [adminUser, setAdminUser] = useState({});
@@ -19,7 +24,6 @@ const Home = () => {
   const establishSocketConnection = async () => {
     try {
       setRenderLoadingState(true);
-      console.log("get user by username api");
       const responseUser = await AuthHttpServer.getUserId(); //from localstorage
       const admin = await AuthHttpServer.getUserByUsername("admin");
       if (responseUser) {
@@ -49,9 +53,9 @@ const Home = () => {
     return isOverlayVisible ? null : <ClientChat userId={userId} adminUserId={adminUser} />
   }
   return (
-    <div>
+    <Container>
       {getClientChatComponent()}
-    </div>
+    </Container>
   );
 };
 

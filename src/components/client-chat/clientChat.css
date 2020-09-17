@@ -1,0 +1,18 @@
+/* .contenedor-cliente{
+    background-color: red !important;
+    color: #eaeaea !important;
+} */
+
+
+  .rcw-message > .rcw-response {
+    /* background-color: black; */
+    color: black;
+  }
+  .rcw-response > .rcw-message-text {
+    color: black;
+}
+
+.rcw-new-message  {
+color: black !important;
+}
+

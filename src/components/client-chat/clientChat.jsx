@@ -1,10 +1,16 @@
-"use strict";
 import React, { useState, useRef, useEffect } from "react";
-import "./messages";
-// import "./clientChat.css";
+import {
+  addResponseMessage,
+  deleteMessages,
+  toggleMsgLoader,
+  Widget,
+} from "react-chat-widget";
 import Messages from "./messages";
 import ChatSocketService from "../../services/socket/ChatSocketService";
 import { getTime } from "../../helpers/date";
+import "./messages";
+import "./clientChat.css";
+import "react-chat-widget/lib/styles.css";
 
 const ClientChat = ({ userId, adminUserId }) => {
   const inputArea = useRef();
@@ -42,6 +48,7 @@ const ClientChat = ({ userId, adminUserId }) => {
       ...conversations,
       socketMessagePacket,
     ]);
+    addResponseMessage(socketMessagePacket.message);
   };
 
   const handleTyping = (e) => {
@@ -55,7 +62,7 @@ const ClientChat = ({ userId, adminUserId }) => {
     }
   };
   const startCheckingTyping = () => {
-    console.log("Typing");
+    // console.log("Typing");
     const typingInterval = setInterval(() => {
       if (Date.now() - lastUpdateTime > 3000) {
         setIsTyping(false);
@@ -65,7 +72,7 @@ const ClientChat = ({ userId, adminUserId }) => {
   };
 
   const stopCheckingTyping = (intervalID) => {
-    console.log("Stop Typing");
+    // console.log("Stop Typing");
     if (intervalID) {
       clearInterval(intervalID);
     }
@@ -101,9 +108,23 @@ const ClientChat = ({ userId, adminUserId }) => {
     emmitTypingEvent(isTyping);
   }, [isTyping]);
 
+  const handleNewUserMessage = (newMessage) => {
+    // console.log(`New message incoming! ${newMessage}`);
+    // Now send the message throught the backend API
+    sendAndUpdateMessages({
+      fromUserId: userId,
+      message: newMessage,
+      toUserId: adminUserId,
+      time: getTime(new Date(Date.now())),
+    });
+  };
   return (
     <div className="contenedor-cliente">
-      Chat Client
+      <Widget
+        handleNewUserMessage={handleNewUserMessage}
+        handleTextInputChange={handleTyping}
+      />
+      {/* <p>Chat Client</p>
       <Messages conversations={conversations} />
       <div className="send-message-container">
         <input
@@ -115,7 +136,7 @@ const ClientChat = ({ userId, adminUserId }) => {
           onKeyUp={handleTyping}
         />
         <button onClick={handleSendMessage}>Send</button>
-      </div>
+      </div> */}
     </div>
   );
 };
