@@ -1,4 +1,5 @@
 import axios from "axios";
+import { restApiUrl } from "../../config";
 import { getAccessToken, setAccessToken } from "../../helpers/accessToken";
 import AuthHttpServer from "../authentication/AuthHttpServer";
 
@@ -15,7 +16,7 @@ class ProductsHttpServer {
   constructor() {
     this.api = axios.create({
       withCredentials: true,
-      baseURL: "http://localhost:8002",
+      baseURL: restApiUrl,
     });
     this.api.interceptors.request.use(
       async (config) => {

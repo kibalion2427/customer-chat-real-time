@@ -1,10 +1,11 @@
 import * as axios from "axios";
+import { apiUrl } from "../../config";
 
 class AuthHttpServer {
   constructor() {
     this.authAPI = axios.create({
       withCredentials: true,
-      baseURL: "http://localhost:8001",
+      baseURL: apiUrl,
     });
   }
 

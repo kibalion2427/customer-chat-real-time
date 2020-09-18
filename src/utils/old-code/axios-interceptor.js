@@ -1,4 +1,5 @@
 import axios from "axios";
+import { restApiUrl } from "../../config";
 import { getAccessToken, setAccessToken } from "../../helpers/accessToken";
 import AuthHttpServer from "./AuthHttpServer";
 
@@ -6,7 +7,7 @@ class ProductsHttpServer {
   constructor() {
     this.api = axios.create({
       withCredentials: true,
-      baseURL: "http://localhost:8002",
+      baseURL: restApiUrl,
     });
     // this.api.interceptors.request.use(
     //   async (config) => {
@@ -47,36 +48,42 @@ class ProductsHttpServer {
 
     this.api.interceptors.response.use(
       (response) => {
-        return response
+        return response;
       },
       (error) => {
         return new Promise((resolve) => {
-          const originalRequest = error.config
-          console.log("ORIGINAL_REQUEST 1 ",originalRequest)
-          if (error.response && error.response.status === 403 && error.config && !originalRequest._retry ) {
-            originalRequest._retry = true
-            const response =  AuthHttpServer.refreshToken()
-            .then((res)=>{
-              console.log("res 1",res)
-              return res})
-            .then((res)=>{
-              console.log("RES 2",res)
-              setAccessToken(res.accessToken);
-              console.log("ORIGINAL_REQUEST 2",originalRequest)
-              const accesToken = getAccessToken();
-              originalRequest.headers["authorization"] = accesToken
-                ? `bearer ${accesToken}`
-                : "";
-              return axios(originalRequest)
-            })
-            console.log("RESPONSE",response)
-            resolve(response)
+          const originalRequest = error.config;
+          console.log("ORIGINAL_REQUEST 1 ", originalRequest);
+          if (
+            error.response &&
+            error.response.status === 403 &&
+            error.config &&
+            !originalRequest._retry
+          ) {
+            originalRequest._retry = true;
+            const response = AuthHttpServer.refreshToken()
+              .then((res) => {
+                console.log("res 1", res);
+                return res;
+              })
+              .then((res) => {
+                console.log("RES 2", res);
+                setAccessToken(res.accessToken);
+                console.log("ORIGINAL_REQUEST 2", originalRequest);
+                const accesToken = getAccessToken();
+                originalRequest.headers["authorization"] = accesToken
+                  ? `bearer ${accesToken}`
+                  : "";
+                return axios(originalRequest);
+              });
+            console.log("RESPONSE", response);
+            resolve(response);
           }
-    
-          return Promise.reject(error)
-        })
-      },
-    )
+
+          return Promise.reject(error);
+        });
+      }
+    );
 
     // this.api.interceptors.response.use(
     //   (response) => {

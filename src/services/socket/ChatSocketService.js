@@ -1,4 +1,5 @@
 import * as io from "socket.io-client";
+import { apiUrl } from "../../config";
 import Emitter from "../../services/emitter";
 // import events from "events";
 
@@ -12,7 +13,7 @@ class ChatSocketService {
   establishSocketConnection(userId) {
     console.log(`ESTABLISHING SOCKET CONNECTION TO ${userId}`);
     try {
-      this.socket = io(`http://localhost:8001`, {
+      this.socket = io(apiUrl, {
         query: `userId=${userId}`,
       });
     } catch (error) {

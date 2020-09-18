@@ -1,9 +1,6 @@
 module.exports = {
-    siteTitle: "Brittany Chiang | Software Engineer",
-    siteDescription:
-      "Brittany Chiang is a software engineer based in Boston, MA who specializes in developing (and occasionally designing) exceptional, high-quality websites and applications.",
-    siteKeywords:
-      "Brittany Chiang, Brittany, Chiang, bchiang7, software engineer, front-end engineer, web developer, javascript, northeastern",
+    apiUrl:"http://localhost:8001",
+    restApiUrl:"http://localhost:8002",
     siteUrl: "https://brittanychiang.com",
     siteLanguage: "en_US",
     googleAnalyticsID: "UA-45666519-2",

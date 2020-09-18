@@ -1,10 +1,11 @@
 import axios from "axios";
+import { apiUrl } from "../../config";
 
 class ChatHttpService {
   constructor() {
     this.chatAPI = axios.create({
       withCredentials: true,
-      baseURL: "http://localhost:8001",
+      baseURL: apiUrl,
     });
   }
   getMessages(userId, toUserId) {
