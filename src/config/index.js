@@ -1,6 +1,7 @@
 module.exports = {
   apiUrl: "/api",
-  chatSocketUrl:"/chatsocket",
+  chatSocketUrl: "http://localhost:8001",
+  pathChatSocket: "/chatsocket",
   restApiUrl: "http://localhost:8002",
   siteUrl: "https://brittanychiang.com",
   siteLanguage: "en_US",
