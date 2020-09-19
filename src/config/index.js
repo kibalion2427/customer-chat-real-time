@@ -1,6 +1,6 @@
 module.exports = {
   apiUrl: "/api",
-  chatSocketUrl: "http://localhost:8001",
+  chatSocketUrl: "http://ec2-3-17-204-4.us-east-2.compute.amazonaws.com",
   pathChatSocket: "/chatsocket",
   restApiUrl: "http://localhost:8002",
   siteUrl: "https://brittanychiang.com",
